@@ -7,8 +7,12 @@ import Register from "./pages/Register";
 import Home from "./pages/home/Home";
 import ListBlog from "./pages/home/blog/ListBlog";
 import AddBlog from "./pages/home/blog/AddBlog";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {getBlogs} from "./services/blogsService";
 
 function App() {
+
   return (
       <>
         <div className='container-fluid'>

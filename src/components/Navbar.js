@@ -1,6 +1,15 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {getBlogs} from "../services/blogsService";
+import {compose} from "@reduxjs/toolkit";
 
 export default function Navbar() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const user= useSelector(state =>{
+        return state.user.currentUser;
+    })
     return (
         <>
             <div className="row">
@@ -18,31 +27,15 @@ export default function Navbar() {
                                     <li className="nav-item">
                                         <Link className="nav-link active" aria-current="page" to="/add-blog">Add Blog</Link>
                                     </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="#">Link</a>
-                                    </li>
-                                    <li className="nav-item dropdown">
-                                        <a className="nav-link dropdown-toggle" href="#" role="button"
-                                           data-bs-toggle="dropdown" aria-expanded="false">
-                                            Dropdown
-                                        </a>
-                                        <ul className="dropdown-menu">
-                                            <li><a className="dropdown-item" href="#">Action</a></li>
-                                            <li><a className="dropdown-item" href="#">Another action</a></li>
-                                            <li>
-                                                <hr className="dropdown-divider"/>
-                                            </li>
-                                            <li><a className="dropdown-item" href="#">Something else here</a></li>
-                                        </ul>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link disabled">Disabled</a>
-                                    </li>
                                 </ul>
                                 <form className="d-flex" role="search">
-                                    <Link to={'/'}>
-                                        <button className="btn btn-outline-danger my-2 my-sm-0" type="submit">Logout</button>
-                                    </Link>
+                                    <h5>{user.username}</h5>
+                                        <button className="btn btn-outline-danger my-2 my-sm-0" type="submit" onClick={()=>{
+                                            localStorage.clear();
+                                            navigate('/')
+                                        }
+                                        }>Logout</button>
+
                                 </form>
                             </div>
                         </div>
