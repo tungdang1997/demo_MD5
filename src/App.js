@@ -7,9 +7,8 @@ import Register from "./pages/Register";
 import Home from "./pages/home/Home";
 import ListBlog from "./pages/home/blog/ListBlog";
 import AddBlog from "./pages/home/blog/AddBlog";
-import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
-import {getBlogs} from "./services/blogsService";
+import EditBlog from "./pages/home/blog/EditBlog";
+import UpLoad from "./pages/Upload";
 
 function App() {
 
@@ -21,7 +20,11 @@ function App() {
                 <Route path={'register'} element={<Register/>}></Route>
                 <Route path={'home'} element={<Home/>}>
                     <Route path={''} element={<ListBlog/>}></Route>
-                    <Route path={'add-blog'} element={<AddBlog/>}></Route>
+                    <Route path={'add-blog'} element={<AddBlog/>}>
+                        <Route path={'upload'} element={<UpLoad/>}/>
+                    </Route>
+                    <Route path={'edit-blog/:id'} element={<EditBlog/>}></Route>
+                    <Route path={'delete-blog/:id'}></Route>
                 </Route>
             </Routes>
         </div>

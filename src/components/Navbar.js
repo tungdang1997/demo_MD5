@@ -1,15 +1,17 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
-import {getBlogs} from "../services/blogsService";
-import {compose} from "@reduxjs/toolkit";
+
+
 
 export default function Navbar() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user= useSelector(state =>{
+
         return state.user.currentUser;
+
     })
+
     return (
         <>
             <div className="row">
@@ -25,11 +27,11 @@ export default function Navbar() {
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                                     <li className="nav-item">
-                                        <Link className="nav-link active" aria-current="page" to="/add-blog">Add Blog</Link>
+                                        <Link className="nav-link active" aria-current="page" to="add-blog">Add Blog</Link>
                                     </li>
                                 </ul>
                                 <form className="d-flex" role="search">
-                                    <h5>{user.username}</h5>
+                                    <h5>{user !== undefined &&user.username}</h5>
                                         <button className="btn btn-outline-danger my-2 my-sm-0" type="submit" onClick={()=>{
                                             localStorage.clear();
                                             navigate('/')

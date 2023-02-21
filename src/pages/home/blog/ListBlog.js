@@ -1,19 +1,27 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import {getBlogs} from "../../../services/blogsService";
-import {login} from "../../../services/userService";
+import {getBlogs, removeBlog} from "../../../services/blogsService";
+import {Link, useNavigate} from "react-router-dom";
+import swal from 'sweetalert';
 
-export default function ListBlog(){
+export default function ListBlog() {
     const dispatch = useDispatch();
-    const blogs = useSelector(state =>{
-        return state.blogs.blogs;
+    const navigate = useNavigate()
+    const blogs = useSelector(state => {
+        if (state.blogs.blogs !== undefined){
+            return state.blogs.blogs;
+        }
+
     })
-    const user= useSelector(state =>{
-        return state.user.currentUser;
+    const user = useSelector(state => {
+        if (state.user.currentUser !== undefined){
+            return state.user.currentUser;
+        }
+
     })
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getBlogs())
-    },[])
+    }, [])
     return (
         <div className={"row"}>
             <div className="offset-center">
@@ -26,26 +34,56 @@ export default function ListBlog(){
                         <th scope="col">Date</th>
                         <th scope="col">Username</th>
                         <th scope="col">Image</th>
+                        <th scope="col" colSpan={2}>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     {
-                        blogs.map((item,index)=> {
+                        blogs.map((item, index) => {
 
-                        if (item.user.username == user.username){
-                            return(
-                                <tr>
-                                    <th scope="row">{index+1}</th>
-                                    <td>{item.content}</td>
-                                    <td>{item.status}</td>
-                                    <td>{item.date}</td>
-                                    <td>{item.username}</td>
-                                    <td>{item.image}</td>
-                                </tr>
-                            )
-                        }else return (<></>)
+                            if (user !== undefined && item.username === user.username) {
+                                return (
+                                    <tr>
+                                        <th scope="row">{index + 1}</th>
+                                        <td>{item.content}</td>
+                                        <td>{item.status}</td>
+                                        <td>{item.date}</td>
+                                        <td>{item.username}</td>
+                                        <td><img src={item.image} alt="" width={200} height={200}/></td>
+                                        <td><Link to={`edit-blog/${item.id}`}>
+                                            <button>Edit</button>
+                                        </Link></td>
+                                        <td><Link to={`delete-blog/${item.id}`}>
+                                            <button onClick={() => {
+                                                dispatch(removeBlog(item.id)).then(() => {
+                                                    dispatch(getBlogs()).then(() => {
+                                                        navigate('/home')
+                                                    })
+                                                })
+                                                swal({
+                                                    title: "Are you sure?",
+                                                    text: "!!!",
+                                                    icon: "warning",
+                                                    buttons: true,
+                                                    dangerMode: true,
+                                                })
+                                                    .then((willDelete) => {
+                                                        if (willDelete) {
+                                                            swal("Xoa thanh cong!", {
+                                                                icon: "success",
+                                                            });
+                                                        } else {
+                                                            swal("Khong xoa thanh cong!");
+                                                        }
+                                                    });
+                                            }}>Delete
+                                            </button>
+                                        </Link></td>
+                                    </tr>
+                                )
+                            } else return (<></>)
                         })
-                        })
+                    })
                     }
                     </tbody>
                 </table>
